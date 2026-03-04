@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Subject } from '@/types';
+import FileUpload from '@/components/ui/FileUpload';
 
 export default function SubjectsPage() {
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -46,18 +47,22 @@ export default function SubjectsPage() {
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    const payload = { ...form, syllabus: JSON.parse(form.syllabus || '[]') };
-    if (editing) {
-      const { error } = await supabase.from('subjects').update(payload).eq('id', editing.id);
-      if (error) { showToast('Error: ' + error.message, 'error'); return; }
-      showToast('Subject updated!', 'success');
-    } else {
-      const { error } = await supabase.from('subjects').insert([payload]);
-      if (error) { showToast('Error: ' + error.message, 'error'); return; }
-      showToast('Subject created!', 'success');
+    try {
+      const payload = { ...form, syllabus: JSON.parse(form.syllabus || '[]') };
+      if (editing) {
+        const { error } = await supabase.from('subjects').update(payload).eq('id', editing.id);
+        if (error) throw error;
+        showToast('Subject updated!', 'success');
+      } else {
+        const { error } = await supabase.from('subjects').insert([payload]);
+        if (error) throw error;
+        showToast('Subject created!', 'success');
+      }
+      setShowModal(false);
+      fetchSubjects();
+    } catch (err: any) {
+      showToast('Error: ' + err.message, 'error');
     }
-    setShowModal(false);
-    fetchSubjects();
   }
 
   async function handleDelete(id: string) {
@@ -151,6 +156,15 @@ export default function SubjectsPage() {
                 <label className="form-label">Syllabus (JSON array of strings)</label>
                 <textarea className="form-textarea" value={form.syllabus} onChange={(e) => setForm({ ...form, syllabus: e.target.value })} placeholder='["Topic 1", "Topic 2"]' />
               </div>
+              
+              <FileUpload 
+                bucket="icons" 
+                label="Course Icon (Optional)" 
+                accept="image/*"
+                onUploadComplete={(url) => setForm({ ...form, icon_name: url })}
+                currentUrl={form.icon_name}
+              />
+
               <div className="modal-footer">
                 <button type="button" className="btn btn-ghost" onClick={() => setShowModal(false)}>Cancel</button>
                 <button type="submit" className="btn btn-primary">{editing ? 'Update' : 'Create'}</button>

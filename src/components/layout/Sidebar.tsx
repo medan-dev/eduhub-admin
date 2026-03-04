@@ -56,54 +56,58 @@ const itemVariants = {
   visible: { x: 0, opacity: 1 },
 };
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const pathname = usePathname();
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-header">
-        <div className="sidebar-logo">
-          <div className="sidebar-logo-icon">E</div>
-          <div className="sidebar-logo-text">
-            <h1>EduHub UG</h1>
-            <p>Admin Panel</p>
+    <>
+      {isOpen && <div className="sidebar-overlay" onClick={onClose} />}
+      <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <div className="sidebar-logo">
+            <div className="sidebar-logo-icon">E</div>
+            <div className="sidebar-logo-text">
+              <h1>EduHub UG</h1>
+              <p>Admin Panel</p>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <motion.nav 
-        className="sidebar-nav"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {navItems.map((section) => (
-          <div key={section.section}>
-            <div className="nav-section-title">{section.section}</div>
-            {section.items.map((item) => {
-              const Icon = item.icon;
-              return (
-                <motion.div key={item.href} variants={itemVariants}>
-                  <Link
-                    href={item.href}
-                    className={`nav-link ${pathname === item.href ? 'active' : ''}`}
-                  >
-                    <span><Icon size={18} /></span>
-                    <span>{item.label}</span>
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </div>
-        ))}
-      </motion.nav>
+        
+        <motion.nav 
+          className="sidebar-nav"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {navItems.map((section) => (
+            <div key={section.section}>
+              <div className="nav-section-title">{section.section}</div>
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <motion.div key={item.href} variants={itemVariants}>
+                    <Link
+                      href={item.href}
+                      className={`nav-link ${pathname === item.href ? 'active' : ''}`}
+                      onClick={onClose}
+                    >
+                      <span><Icon size={18} /></span>
+                      <span>{item.label}</span>
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </div>
+          ))}
+        </motion.nav>
 
-      <div style={{ padding: '16px 12px', borderTop: '1px solid var(--border-color)' }}>
-        <Link href="/" className="nav-link" style={{ color: 'var(--danger)' }}>
-          <LogOut size={18} />
-          <span>Logout</span>
-        </Link>
-      </div>
-    </aside>
+        <div style={{ padding: '16px 12px', borderTop: '1px solid var(--border-color)' }}>
+          <Link href="/" className="nav-link" style={{ color: 'var(--danger)' }}>
+            <LogOut size={18} />
+            <span>Logout</span>
+          </Link>
+        </div>
+      </aside>
+    </>
   );
 }

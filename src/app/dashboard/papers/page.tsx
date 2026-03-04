@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Paper } from '@/types';
+import FileUpload from '@/components/ui/FileUpload';
 
 export default function PapersPage() {
   const [papers, setPapers] = useState<Paper[]>([]);
@@ -186,10 +187,12 @@ export default function PapersPage() {
                   <input className="form-input" type="number" value={form.pass_mark} onChange={(e) => setForm({ ...form, pass_mark: parseInt(e.target.value) })} />
                 </div>
               </div>
-              <div className="form-group">
-                <label className="form-label">PDF URL (optional)</label>
-                <input className="form-input" value={form.pdf_url} onChange={(e) => setForm({ ...form, pdf_url: e.target.value })} placeholder="https://..." />
-              </div>
+              <FileUpload 
+                bucket="papers" 
+                label="Upload Paper PDF" 
+                onUploadComplete={(url) => setForm({ ...form, pdf_url: url })}
+                currentUrl={form.pdf_url}
+              />
               <div className="modal-footer">
                 <button type="button" className="btn btn-ghost" onClick={() => setShowModal(false)}>Cancel</button>
                 <button type="submit" className="btn btn-primary">{editing ? 'Update' : 'Create'}</button>
