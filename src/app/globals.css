@@ -3,22 +3,25 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
 
 :root {
-  --bg-primary: #0a0a1a;
-  --bg-secondary: #111128;
-  --bg-card: rgba(255, 255, 255, 0.05);
-  --bg-card-hover: rgba(255, 255, 255, 0.08);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --text-primary: #f0f0ff;
-  --text-secondary: #9898b8;
-  --text-muted: #6868a0;
-  --accent-primary: #6c5ce7;
-  --accent-secondary: #a29bfe;
-  --accent-glow: rgba(108, 92, 231, 0.3);
-  --success: #00d68f;
-  --warning: #f7b731;
-  --danger: #ff4757;
-  --info: #3498db;
-  --sidebar-width: 260px;
+  --bg-primary: #05050f;
+  --bg-secondary: #0a0a1a;
+  --bg-card: rgba(255, 255, 255, 0.03);
+  --bg-card-hover: rgba(255, 255, 255, 0.06);
+  --border-color: rgba(255, 255, 255, 0.06);
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0c0;
+  --text-muted: #606080;
+  --accent-primary: #7c4dff;
+  --accent-secondary: #00e5ff;
+  --accent-glow: rgba(124, 77, 255, 0.2);
+  --success: #00f2fe;
+  --warning: #ffcc00;
+  --danger: #ff5252;
+  --info: #00d2ff;
+  --sidebar-width: 280px;
+  --glass-bg: rgba(10, 10, 26, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 * {
@@ -601,70 +604,74 @@ body {
   color: var(--danger);
 }
 
-/* Login Page */
-.login-container {
-  min-height: 100vh;
+/* Login Page Revamp */
+.login-logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.login-logo-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-primary);
-  position: relative;
-  overflow: hidden;
-}
-
-.login-container::before {
-  content: "";
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--accent-glow), transparent 70%);
-  top: -200px;
-  right: -100px;
-  pointer-events: none;
-}
-
-.login-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 24px;
-  padding: 48px;
-  width: 100%;
-  max-width: 420px;
-  backdrop-filter: blur(20px);
+  color: white;
+  box-shadow: 0 8px 16px var(--accent-glow);
 }
 
 .login-card h1 {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 800;
   margin-bottom: 8px;
-  background: linear-gradient(135deg, var(--accent-secondary), #f0f0ff);
+  text-align: center;
+  background: linear-gradient(135deg, #ffffff, #a0a0c0);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .login-card p {
-  color: var(--text-muted);
-  font-size: 14px;
-  margin-bottom: 32px;
-}
-
-.login-card .form-input {
-  margin-bottom: 16px;
-}
-
-.login-card .btn-primary {
-  width: 100%;
-  justify-content: center;
-  padding: 14px;
+  color: var(--text-secondary);
   font-size: 15px;
-  margin-top: 8px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.login-form .form-group {
+  margin-bottom: 20px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.spinner-small {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
 .login-error {
+  background: rgba(255, 82, 82, 0.1);
+  border: 1px solid rgba(255, 82, 82, 0.2);
   color: var(--danger);
+  padding: 12px;
+  border-radius: 10px;
   font-size: 13px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   text-align: center;
 }
 
@@ -714,5 +721,45 @@ body {
   }
   .form-grid {
     grid-template-columns: 1fr;
+  }
+}
+/* Animation Utilities */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px var(--accent-glow);
+  border-color: var(--accent-primary);
+}
+
+.entrance-pop {
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

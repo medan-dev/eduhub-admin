@@ -3,7 +3,18 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
+import { 
+  BookOpen, 
+  FileText, 
+  Video, 
+  GraduationCap, 
+  School, 
+  HelpCircle,
+  TrendingUp,
+  Clock
+} from 'lucide-react';
 
 interface Stats {
   subjects: number;
@@ -13,6 +24,25 @@ interface Stats {
   schools: number;
   quizzes: number;
 }
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: { 
+    y: 0, 
+    opacity: 1,
+    transition: { type: 'spring', stiffness: 300, damping: 24 }
+  },
+} as const;
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats>({
@@ -45,7 +75,6 @@ export default function DashboardPage() {
         quizzes: quizzes.count || 0,
       });
 
-      // Fetch recent papers
       const { data } = await supabase
         .from('papers')
         .select('*')
@@ -61,19 +90,24 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="loading">
-        <div className="spinner"></div>
+      <div className="content-body">
+        <div className="stats-grid">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="glass-card stat-card shimmer" style={{ height: 104 }}></div>
+          ))}
+        </div>
+        <div className="glass-card shimmer" style={{ height: 400, marginTop: 24 }}></div>
       </div>
     );
   }
 
   const statCards = [
-    { label: 'Subjects', value: stats.subjects, icon: '📚', color: 'purple' },
-    { label: 'Past Papers', value: stats.papers, icon: '📄', color: 'blue' },
-    { label: 'Videos', value: stats.videos, icon: '🎬', color: 'green' },
-    { label: 'Tutorials', value: stats.tutorials, icon: '🎓', color: 'orange' },
-    { label: 'Schools', value: stats.schools, icon: '🏫', color: 'pink' },
-    { label: 'Quizzes', value: stats.quizzes, icon: '❓', color: 'teal' },
+    { label: 'Subjects', value: stats.subjects, icon: BookOpen, color: 'purple' },
+    { label: 'Past Papers', value: stats.papers, icon: FileText, color: 'blue' },
+    { label: 'Videos', value: stats.videos, icon: Video, color: 'green' },
+    { label: 'Tutorials', value: stats.tutorials, icon: GraduationCap, color: 'orange' },
+    { label: 'Schools', value: stats.schools, icon: School, color: 'pink' },
+    { label: 'Quizzes', value: stats.quizzes, icon: HelpCircle, color: 'teal' },
   ];
 
   return (
@@ -84,22 +118,47 @@ export default function DashboardPage() {
           <p>Welcome back! Here&#39;s your content overview.</p>
         </div>
       </header>
+      
       <div className="content-body">
-        <div className="stats-grid">
-          {statCards.map((card) => (
-            <div key={card.label} className="glass-card stat-card">
-              <div className={`stat-icon ${card.color}`}>{card.icon}</div>
-              <div className="stat-info">
-                <h3>{card.value}</h3>
-                <p>{card.label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <motion.div 
+          className="stats-grid"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {statCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <motion.div 
+                key={card.label} 
+                className="glass-card stat-card"
+                variants={cardVariants}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              >
+                <div className={`stat-icon ${card.color}`}>
+                  <Icon size={24} />
+                </div>
+                <div className="stat-info">
+                  <h3>{card.value}</h3>
+                  <p>{card.label}</p>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
 
-        <div className="glass-card" style={{ marginTop: 24 }}>
+        <motion.div 
+          className="glass-card" 
+          style={{ marginTop: 24 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-            <h3 style={{ fontSize: 18, fontWeight: 700 }}>Recent Papers</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Clock size={20} className="text-purple" />
+              <h3 style={{ fontSize: 18, fontWeight: 700 }}>Recent Papers</h3>
+            </div>
             <a href="/dashboard/papers" className="btn btn-ghost btn-sm">View All →</a>
           </div>
           {recentPapers.length > 0 ? (
@@ -135,7 +194,7 @@ export default function DashboardPage() {
               <p>Add your first past paper to get started</p>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </>
   );

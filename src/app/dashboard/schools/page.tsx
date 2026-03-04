@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { School } from '@/lib/types';
+import { School } from '@/types';
 
 export default function SchoolsPage() {
   const [schools, setSchools] = useState<School[]>([]);
@@ -13,6 +13,7 @@ export default function SchoolsPage() {
   const [form, setForm] = useState({
     name: '', code: '', district: '', type: 'Government - Mixed Secondary', exam_board: 'UNEB',
   });
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => { fetchSchools(); }, []);
 
@@ -21,6 +22,12 @@ export default function SchoolsPage() {
     if (!error) setSchools(data || []);
     setLoading(false);
   }
+
+  const filteredSchools = schools.filter(s => 
+    s.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    s.district.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    s.code?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   function showToast(message: string, type: string) {
     setToast({ message, type });
@@ -71,11 +78,22 @@ export default function SchoolsPage() {
           <h2>🏫 Schools</h2>
           <p>Manage Ugandan schools database</p>
         </div>
-        <button className="btn btn-primary" onClick={openCreate}>+ Add School</button>
+        <div className="header-actions">
+           <div className="search-container">
+            <input 
+              type="text" 
+              className="form-input search-input" 
+              placeholder="Search schools..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <button className="btn btn-primary" onClick={openCreate}>+ Add School</button>
+        </div>
       </header>
       <div className="content-body">
         <div className="glass-card">
-          {schools.length > 0 ? (
+          {filteredSchools.length > 0 ? (
             <table className="data-table">
               <thead>
                 <tr>

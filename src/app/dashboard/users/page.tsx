@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Profile } from '@/lib/types';
+import { Profile } from '@/types';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<Profile[]>([]);

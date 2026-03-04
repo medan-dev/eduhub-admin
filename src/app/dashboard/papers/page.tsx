@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Paper } from '@/lib/types';
+import { Paper } from '@/types';
 
 export default function PapersPage() {
   const [papers, setPapers] = useState<Paper[]>([]);
@@ -15,7 +15,17 @@ export default function PapersPage() {
     total_marks: 100, pass_mark: 40, difficulty: 3.0, pdf_url: '',
   });
 
-  useEffect(() => { fetchPapers(); }, []);
+  const [subjects, setSubjects] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetchPapers();
+    fetchSubjects();
+  }, []);
+
+  async function fetchSubjects() {
+    const { data } = await supabase.from('subjects').select('name').order('name');
+    if (data) setSubjects(data.map(s => s.name));
+  }
 
   async function fetchPapers() {
     const { data, error } = await supabase
@@ -72,8 +82,6 @@ export default function PapersPage() {
   }
 
   if (loading) return <div className="loading"><div className="spinner"></div></div>;
-
-  const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'History', 'Geography', 'Economics'];
 
   return (
     <>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Video } from '@/lib/types';
+import { Video } from '@/types';
 
 export default function VideosPage() {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -15,7 +15,17 @@ export default function VideosPage() {
     published_date: '', description: '', youtube_id: '', subject: '',
   });
 
-  useEffect(() => { fetchVideos(); }, []);
+  const [subjects, setSubjects] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetchVideos();
+    fetchSubjects();
+  }, []);
+
+  async function fetchSubjects() {
+    const { data } = await supabase.from('subjects').select('name').order('name');
+    if (data) setSubjects(data.map(s => s.name));
+  }
 
   async function fetchVideos() {
     const { data, error } = await supabase.from('videos').select('*').order('created_at', { ascending: false });
@@ -68,8 +78,6 @@ export default function VideosPage() {
   }
 
   if (loading) return <div className="loading"><div className="spinner"></div></div>;
-
-  const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'History', 'Geography', 'Economics'];
 
   return (
     <>
@@ -156,7 +164,7 @@ export default function VideosPage() {
                 <div className="form-group">
                   <label className="form-label">Subject</label>
                   <select className="form-select" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} required>
-                    <option value="">Select</option>
+                    <option value="">Select subject</option>
                     {subjects.map((s) => <option key={s} value={s}>{s}</option>)}
                   </select>
                 </div>

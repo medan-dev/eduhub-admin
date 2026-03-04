@@ -1,4 +1,5 @@
-import Sidebar from '@/components/Sidebar';
+import Sidebar from '@/components/layout/Sidebar';
+import PageTransition from '@/components/layout/PageTransition';
 
 export default function DashboardLayout({
   children,
@@ -9,7 +10,9 @@ export default function DashboardLayout({
     <div className="admin-layout">
       <Sidebar />
       <main className="main-content">
-        {children}
+        <PageTransition>
+          {children}
+        </PageTransition>
       </main>
     </div>
   );

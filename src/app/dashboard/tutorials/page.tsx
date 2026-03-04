@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Tutorial } from '@/lib/types';
+import { Tutorial } from '@/types';
 
 export default function TutorialsPage() {
   const [tutorials, setTutorials] = useState<Tutorial[]>([]);
@@ -15,7 +15,17 @@ export default function TutorialsPage() {
     duration: '', description: '', enrolled_count: 0, subject: '',
   });
 
-  useEffect(() => { fetchTutorials(); }, []);
+  const [subjects, setSubjects] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetchTutorials();
+    fetchSubjects();
+  }, []);
+
+  async function fetchSubjects() {
+    const { data } = await supabase.from('subjects').select('name').order('name');
+    if (data) setSubjects(data.map(s => s.name));
+  }
 
   async function fetchTutorials() {
     const { data, error } = await supabase.from('tutorials').select('*').order('created_at', { ascending: false });
@@ -69,7 +79,6 @@ export default function TutorialsPage() {
 
   if (loading) return <div className="loading"><div className="spinner"></div></div>;
 
-  const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'History', 'Geography', 'Economics'];
   const difficultyColor: Record<string, string> = { Beginner: 'badge-green', Intermediate: 'badge-orange', Advanced: 'badge-pink' };
 
   return (
@@ -145,7 +154,7 @@ export default function TutorialsPage() {
                 <div className="form-group">
                   <label className="form-label">Subject</label>
                   <select className="form-select" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} required>
-                    <option value="">Select</option>
+                    <option value="">Select subject</option>
                     {subjects.map((s) => <option key={s} value={s}>{s}</option>)}
                   </select>
                 </div>
