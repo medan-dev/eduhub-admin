@@ -30,6 +30,10 @@
   box-sizing: border-box;
 }
 
+.mobile-toggle, .mobile-header {
+  display: none;
+}
+
 html,
 body {
   height: 100%;
@@ -37,6 +41,29 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
   overflow-x: hidden;
+  position: relative;
+}
+
+/* Mesh Gradient Background */
+.mesh-gradient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--bg-primary);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(124, 77, 255, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(0, 229, 255, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(124, 77, 255, 0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(0, 229, 255, 0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(124, 77, 255, 0.05) 0px, transparent 50%);
+  filter: blur(100px);
+  animation: meshMove 20s ease-in-out infinite alternate;
+}
+
+@keyframes meshMove {
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.1) translate(20px, 10px); }
+  100% { transform: scale(1) translate(0, 0); }
 }
 
 /* Scrollbar */
@@ -576,35 +603,40 @@ body {
   margin-bottom: 8px;
 }
 
-/* Toast */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  padding: 14px 24px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  z-index: 200;
-  animation: slideUp 0.3s ease;
+/* Login Page Revamp */
+.login-container {
+  min-height: 100vh;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
 }
 
-.toast-success {
-  background: rgba(0, 214, 143, 0.15);
-  border: 1px solid rgba(0, 214, 143, 0.3);
-  color: var(--success);
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 48px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px);
+  position: relative;
 }
 
-.toast-error {
-  background: rgba(255, 71, 87, 0.15);
-  border: 1px solid rgba(255, 71, 87, 0.3);
-  color: var(--danger);
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+  z-index: 1;
 }
-
-/* Login Page Revamp */
 .login-logo-container {
   display: flex;
   justify-content: center;
@@ -789,9 +821,6 @@ body {
   }
 }
 
-.mobile-toggle, .mobile-header {
-  display: none;
-}
 /* Animation Utilities */
 .shimmer {
   background: linear-gradient(
