@@ -97,10 +97,22 @@ export default function UsersPage() {
 
   async function handleDelete(id: string) {
     if (!confirm('Are you sure you want to delete this user?')) return;
-    const { error } = await supabase.from('profiles').delete().eq('id', id);
-    if (error) { showToast('Error deleting user', 'error'); return; }
-    showToast('User deleted successfully!', 'success');
-    fetchUsers();
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: 'DELETE',
+      });
+      const data = await response.json();
+      
+      if (!response.ok) {
+        showToast(data.error || 'Error deleting user', 'error');
+        return;
+      }
+      
+      showToast('User deleted successfully!', 'success');
+      fetchUsers();
+    } catch (error) {
+      showToast('Error deleting user', 'error');
+    }
   }
 
   if (loading) return <div className="loading"><div className="spinner"></div></div>;
