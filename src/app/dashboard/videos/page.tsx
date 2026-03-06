@@ -13,6 +13,7 @@ export default function VideosPage() {
   const [form, setForm] = useState({
     title: '', channel: '', duration: '', views: '',
     published_date: '', description: '', youtube_id: '', subject: '',
+    level: '', grade: ''
   });
 
   const [subjects, setSubjects] = useState<string[]>([]);
@@ -40,7 +41,7 @@ export default function VideosPage() {
 
   function openCreate() {
     setEditing(null);
-    setForm({ title: '', channel: '', duration: '', views: '', published_date: '', description: '', youtube_id: '', subject: '' });
+    setForm({ title: '', channel: '', duration: '', views: '', published_date: '', description: '', youtube_id: '', subject: '', level: '', grade: '' });
     setShowModal(true);
   }
 
@@ -50,6 +51,7 @@ export default function VideosPage() {
       title: video.title, channel: video.channel, duration: video.duration,
       views: video.views, published_date: video.published_date,
       description: video.description, youtube_id: video.youtube_id, subject: video.subject,
+      level: video.level || '', grade: video.grade || '',
     });
     setShowModal(true);
   }
@@ -98,6 +100,7 @@ export default function VideosPage() {
                   <th>Title</th>
                   <th>Channel</th>
                   <th>Subject</th>
+                  <th>Level / Grade</th>
                   <th>Duration</th>
                   <th>Views</th>
                   <th>Actions</th>
@@ -116,6 +119,10 @@ export default function VideosPage() {
                     <td>{video.title}</td>
                     <td>{video.channel}</td>
                     <td><span className="badge badge-green">{video.subject}</span></td>
+                    <td>
+                      {video.level ? <span className="badge badge-purple" style={{marginRight: '4px'}}>{video.level}</span> : null}
+                      {video.grade ? <span className="badge badge-blue">{video.grade}</span> : null}
+                    </td>
                     <td>{video.duration}</td>
                     <td>{video.views}</td>
                     <td>
@@ -166,6 +173,42 @@ export default function VideosPage() {
                   <select className="form-select" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} required>
                     <option value="">Select subject</option>
                     {subjects.map((s) => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Level</label>
+                  <select className="form-select" value={form.level} onChange={(e) => {
+                    const newLevel = e.target.value;
+                    let newGrade = form.grade;
+                    if (newLevel === 'O-Level' && !['Senior One (S.1)', 'Senior Two (S.2)', 'Senior Three (S.3)', 'Senior Four (S.4)'].includes(newGrade)) newGrade = '';
+                    if (newLevel === 'A-Level' && !['Senior Five (S.5)', 'Senior Six (S.6)'].includes(newGrade)) newGrade = '';
+                    setForm({ ...form, level: newLevel, grade: newGrade });
+                  }}>
+                    <option value="">Select level...</option>
+                    <option value="O-Level">O-Level</option>
+                    <option value="A-Level">A-Level</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label className="form-label">Grade / Class</label>
+                  <select className="form-select" value={form.grade} onChange={(e) => setForm({ ...form, grade: e.target.value })}>
+                    <option value="">Select grade...</option>
+                    {form.level === 'O-Level' || !form.level ? (
+                      <>
+                        <option value="Senior One (S.1)">Senior One (S.1)</option>
+                        <option value="Senior Two (S.2)">Senior Two (S.2)</option>
+                        <option value="Senior Three (S.3)">Senior Three (S.3)</option>
+                        <option value="Senior Four (S.4)">Senior Four (S.4)</option>
+                      </>
+                    ) : null}
+                    {form.level === 'A-Level' || !form.level ? (
+                      <>
+                        <option value="Senior Five (S.5)">Senior Five (S.5)</option>
+                        <option value="Senior Six (S.6)">Senior Six (S.6)</option>
+                      </>
+                    ) : null}
                   </select>
                 </div>
                 <div className="form-group">

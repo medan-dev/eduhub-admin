@@ -32,6 +32,8 @@ export interface Video {
   description: string;
   youtube_id: string;
   subject: string;
+  level?: string;
+  grade?: string;
   created_at: string;
 }
 
