@@ -235,4 +235,25 @@ INSERT INTO quizzes (title, subject, questions) VALUES
   {"question": "Who wrote Romeo and Juliet?", "options": ["Shakespeare", "Marlowe", "Milton", "Dante"], "correct": 0},
   {"question": "What is the chemical symbol for Gold?", "options": ["Gd", "Au", "Ag", "Cu"], "correct": 1},
   {"question": "What is the largest planet in our solar system?", "options": ["Mars", "Jupiter", "Saturn", "Neptune"], "correct": 1}
-]');
+
+-- ============================================
+-- 8. Storage Buckets Setup
+-- ============================================
+
+-- Create Buckets
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('papers', 'papers', true),
+       ('icons', 'icons', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Set up RLS Policies for 'papers' bucket
+CREATE POLICY "Public Read Access Papers" ON storage.objects FOR SELECT TO public USING (bucket_id = 'papers');
+CREATE POLICY "Admin Upload Access Papers" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'papers');
+CREATE POLICY "Admin Update Access Papers" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'papers');
+CREATE POLICY "Admin Delete Access Papers" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'papers');
+
+-- Set up RLS Policies for 'icons' bucket
+CREATE POLICY "Public Read Access Icons" ON storage.objects FOR SELECT TO public USING (bucket_id = 'icons');
+CREATE POLICY "Admin Upload Access Icons" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'icons');
+CREATE POLICY "Admin Update Access Icons" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'icons');
+CREATE POLICY "Admin Delete Access Icons" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'icons');

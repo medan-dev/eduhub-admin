@@ -43,6 +43,7 @@ export default function UsersPage() {
                   <th>Name</th>
                   <th>Email</th>
                   <th>Phone</th>
+                  <th>School</th>
                   <th>Role</th>
                   <th>Joined</th>
                 </tr>
@@ -53,6 +54,7 @@ export default function UsersPage() {
                     <td>{u.full_name || '—'}</td>
                     <td>{u.email}</td>
                     <td>{u.phone || '—'}</td>
+                    <td>{u.school || '—'}</td>
                     <td><span className={`badge ${roleColor[u.role] || 'badge-blue'}`}>{u.role}</span></td>
                     <td>{new Date(u.created_at).toLocaleDateString()}</td>
                   </tr>
