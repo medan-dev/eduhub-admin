@@ -21,14 +21,14 @@ const realPapers = [
     pdf_url: "https://www.advance-africa.com/Uganda-National-Examinations-Board-Mathematics-Past-Papers.html",
   },
   {
-    title: "O-Level Math Paper 1 Set 2",
+    title: "O-Level Math Paper 1 2020",
     subject: "Mathematics",
-    year: "2016",
+    year: "2020",
     duration: "2 hours",
     total_marks: 100,
     pass_mark: 40,
     difficulty: 4.0,
-    pdf_url: "https://html.scribdassets.com/2s9o1v6zls6c6b3e/images/1-d0b8d5a1e2.jpg", // Representing the viewing link
+    pdf_url: "https://gayazahs.sc.ug/wp-content/uploads/2020/04/S4-MATH-Paper-1.pdf",
   },
   {
     title: "UCE Physics Past Paper 2023",
@@ -49,6 +49,46 @@ const realPapers = [
     pass_mark: 45,
     difficulty: 3.8,
     pdf_url: "https://stkizitoelearning.com/wp-content/uploads/2021/04/S.4-PHYSICS-PAPER-1-MOCK-EXAM.pdf",
+  },
+  {
+    title: "A-Level Biology Paper 1 2019",
+    subject: "Biology",
+    year: "2019",
+    duration: "2 hours 30 min",
+    total_marks: 100,
+    pass_mark: 50,
+    difficulty: 4.5,
+    pdf_url: "https://gayazahs.sc.ug/wp-content/uploads/2020/04/S6-Biology-P1.pdf",
+  },
+  {
+    title: "UCE Chemistry Exam 2021",
+    subject: "Chemistry",
+    year: "2021",
+    duration: "2 hours",
+    total_marks: 100,
+    pass_mark: 40,
+    difficulty: 3.9,
+    pdf_url: "https://gayazahs.sc.ug/wp-content/uploads/2020/04/S4-Chemistry-P1-.pdf",
+  },
+  {
+    title: "UCE English Language Paper 2 2018",
+    subject: "English",
+    year: "2018",
+    duration: "2 hours",
+    total_marks: 100,
+    pass_mark: 50,
+    difficulty: 3.2,
+    pdf_url: "https://gayazahs.sc.ug/wp-content/uploads/2020/04/S4-English-Language-P2.pdf",
+  },
+  {
+    title: "A-Level History Paper 1 2020",
+    subject: "History",
+    year: "2020",
+    duration: "3 hours",
+    total_marks: 100,
+    pass_mark: 50,
+    difficulty: 4.1,
+    pdf_url: "https://gayazahs.sc.ug/wp-content/uploads/2020/04/S6-HISTORY-P1.pdf",
   }
 ];
 
@@ -72,6 +112,26 @@ const realTutorials = [
     description: "Speed, velocity, acceleration, and Newtonian Mechanics simplified.",
     subject: "Physics",
     enrolled_count: 890
+  },
+  {
+    title: "A-Level Biology: Cell Biology",
+    instructor: "Gayaza E-Learning",
+    difficulty: "Advanced",
+    lessons_count: 12,
+    duration: "7 hours",
+    description: "In-depth study of cell structure, organelles, and their functions.",
+    subject: "Biology",
+    enrolled_count: 530
+  },
+  {
+    title: "UCE Chemistry: Acids, Bases and Salts",
+    instructor: "Digital Teachers UG",
+    difficulty: "Beginner",
+    lessons_count: 6,
+    duration: "4 hours",
+    description: "Fundamental concepts of neutralization, titrations, and pH.",
+    subject: "Chemistry",
+    enrolled_count: 1540
   }
 ];
 
@@ -93,6 +153,18 @@ const realNotes = [
     course_title: "O-Level Physics: Kinematics & Forces",
     lesson_number: 1,
     pdf_url: "https://school.blog/wp-content/uploads/2020/04/o-level-physics-notes.pdf"
+  },
+  {
+    title: "Biology: Cells Notes",
+    course_title: "A-Level Biology: Cell Biology",
+    lesson_number: 1,
+    pdf_url: "https://stkizitoelearning.com/wp-content/uploads/2021/04/S.5-BIOLOGY-NOTES.pdf"
+  },
+  {
+    title: "Chemistry: Acids & Bases",
+    course_title: "UCE Chemistry: Acids, Bases and Salts",
+    lesson_number: 1,
+    pdf_url: "https://stkizitoelearning.com/wp-content/uploads/2021/04/S.3-CHEMISTRY-NOTES-ACIDSBASES-AND-SALTS-2.pdf"
   }
 ];
 

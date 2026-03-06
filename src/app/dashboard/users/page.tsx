@@ -15,7 +15,7 @@ export default function UsersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   
   const [form, setForm] = useState({
-    full_name: '', email: '', phone: '', school: '', stream: '', role: 'student',
+    full_name: '', email: '', phone: '', school: '', district: '', school_type: '', stream: '', role: 'student',
     grade: '', gpa: 0, total_score: 0, papers_completed: 0, videos_watched: 0, hours_studied: 0, study_streak: 0
   });
 
@@ -39,13 +39,14 @@ export default function UsersPage() {
     (u.full_name || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
     (u.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (u.school || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (u.district || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (u.stream || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   function openCreate() {
     setEditing(null);
     setForm({ 
-      full_name: '', email: '', phone: '', school: '', stream: '', role: 'student',
+      full_name: '', email: '', phone: '', school: '', district: '', school_type: '', stream: '', role: 'student',
       grade: '', gpa: 0, total_score: 0, papers_completed: 0, videos_watched: 0, hours_studied: 0, study_streak: 0
     });
     setShowModal(true);
@@ -58,6 +59,8 @@ export default function UsersPage() {
       email: user.email || '', 
       phone: user.phone || '', 
       school: user.school || '', 
+      district: user.district || '',
+      school_type: user.school_type || '',
       stream: user.stream || '', 
       role: user.role || 'student',
       grade: user.grade || '',
@@ -138,6 +141,7 @@ export default function UsersPage() {
                     <th>Name</th>
                     <th>Email</th>
                     <th>School</th>
+                    <th>District</th>
                     <th>Stream</th>
                     <th>Role</th>
                     <th>Actions</th>
@@ -149,6 +153,7 @@ export default function UsersPage() {
                       <td>{u.full_name || '—'}</td>
                       <td>{u.email}</td>
                       <td>{u.school || '—'}</td>
+                      <td>{u.district || '—'}</td>
                       <td>{u.stream || '—'}</td>
                       <td><span className={`badge ${roleColor[u.role] || 'badge-blue'}`}>{u.role}</span></td>
                       <td>
@@ -198,11 +203,36 @@ export default function UsersPage() {
                   <input className="form-input" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">School</label>
-                  <input className="form-input" value={form.school} onChange={(e) => setForm({ ...form, school: e.target.value })} />
+                  <label className="form-label">Role</label>
+                  <select className="form-select" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
+                    <option value="student">Student</option>
+                    <option value="admin">Admin</option>
+                    <option value="teacher">Teacher</option>
+                  </select>
                 </div>
               </div>
               <div className="form-grid">
+                <div className="form-group">
+                  <label className="form-label">School</label>
+                  <input className="form-input" value={form.school} onChange={(e) => setForm({ ...form, school: e.target.value })} />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">District</label>
+                  <input className="form-input" value={form.district} onChange={(e) => setForm({ ...form, district: e.target.value })} />
+                </div>
+              </div>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label className="form-label">School Type</label>
+                  <select className="form-select" value={form.school_type} onChange={(e) => setForm({ ...form, school_type: e.target.value })}>
+                    <option value="">Select Type</option>
+                    <option value="Government - Mixed Secondary">Government - Mixed Secondary</option>
+                    <option value="Private - Mixed Secondary">Private - Mixed Secondary</option>
+                    <option value="Government - Single Sex">Government - Single Sex</option>
+                    <option value="Private - Single Sex">Private - Single Sex</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
                 <div className="form-group">
                   <label className="form-label">Stream</label>
                   <select className="form-select" value={form.stream} onChange={(e) => setForm({ ...form, stream: e.target.value })}>
@@ -213,14 +243,10 @@ export default function UsersPage() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Role</label>
-                  <select className="form-select" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
-                    <option value="student">Student</option>
-                    <option value="admin">Admin</option>
-                    <option value="teacher">Teacher</option>
-                  </select>
+                  {/* Empty space for alignment */}
                 </div>
               </div>
+
               
               {form.role === 'student' && (
                 <>
@@ -311,6 +337,14 @@ export default function UsersPage() {
                 <div>
                   <label className="form-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>School</label>
                   <p>{viewing.school || '—'}</p>
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>District</label>
+                  <p>{viewing.district || '—'}</p>
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>School Type</label>
+                  <p>{viewing.school_type || '—'}</p>
                 </div>
                 <div>
                   <label className="form-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>Stream</label>

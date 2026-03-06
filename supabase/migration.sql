@@ -84,6 +84,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   email TEXT,
   phone TEXT,
   school TEXT,
+  district TEXT,
   stream TEXT,
   avatar_url TEXT,
   role TEXT DEFAULT 'student', -- student, admin
@@ -157,7 +158,7 @@ CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
   INSERT INTO public.profiles (
-    id, full_name, email, role, phone, school, stream, grade, 
+    id, full_name, email, role, phone, school, district, stream, grade, 
     gpa, total_score, papers_completed, videos_watched, hours_studied, study_streak
   )
   VALUES (
@@ -167,6 +168,7 @@ BEGIN
     'student',
     NEW.raw_user_meta_data->>'phone',
     COALESCE(NEW.raw_user_meta_data->>'school_name', NEW.raw_user_meta_data->>'school'),
+    NEW.raw_user_meta_data->>'district',
     NEW.raw_user_meta_data->>'stream',
     NEW.raw_user_meta_data->>'grade',
     0.0, 0, 0, 0, 0, 0

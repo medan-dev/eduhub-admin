@@ -79,6 +79,8 @@ export interface Profile {
   email: string;
   phone: string;
   school: string;
+  district?: string;
+  school_type?: string;
   stream?: string;
   avatar_url: string | null;
   role: string;

@@ -1,0 +1,17 @@
+{
+  "name": "EduHub UG Admin",
+  "short_name": "EduAdmin",
+  "description": "Admin dashboard for EduHub UG educational content",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/globe.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
