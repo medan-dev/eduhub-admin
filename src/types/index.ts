@@ -79,7 +79,15 @@ export interface Profile {
   email: string;
   phone: string;
   school: string;
+  stream?: string;
   avatar_url: string | null;
   role: string;
+  grade?: string;
+  gpa?: number;
+  total_score?: number;
+  papers_completed?: number;
+  videos_watched?: number;
+  hours_studied?: number;
+  study_streak?: number;
   created_at: string;
 }

@@ -84,8 +84,16 @@ CREATE TABLE IF NOT EXISTS profiles (
   email TEXT,
   phone TEXT,
   school TEXT,
+  stream TEXT,
   avatar_url TEXT,
   role TEXT DEFAULT 'student', -- student, admin
+  grade TEXT,
+  gpa DECIMAL(3,2) DEFAULT 0.0,
+  total_score INTEGER DEFAULT 0,
+  papers_completed INTEGER DEFAULT 0,
+  videos_watched INTEGER DEFAULT 0,
+  hours_studied INTEGER DEFAULT 0,
+  study_streak INTEGER DEFAULT 0,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -148,12 +156,20 @@ CREATE POLICY "Insert profile on signup" ON profiles FOR INSERT WITH CHECK (auth
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, full_name, email, role)
+  INSERT INTO public.profiles (
+    id, full_name, email, role, phone, school, stream, grade, 
+    gpa, total_score, papers_completed, videos_watched, hours_studied, study_streak
+  )
   VALUES (
     NEW.id,
     COALESCE(NEW.raw_user_meta_data->>'full_name', ''),
     NEW.email,
-    'student'
+    'student',
+    NEW.raw_user_meta_data->>'phone',
+    COALESCE(NEW.raw_user_meta_data->>'school_name', NEW.raw_user_meta_data->>'school'),
+    NEW.raw_user_meta_data->>'stream',
+    NEW.raw_user_meta_data->>'grade',
+    0.0, 0, 0, 0, 0, 0
   );
   RETURN NEW;
 END;

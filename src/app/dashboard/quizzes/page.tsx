@@ -10,7 +10,7 @@ export default function QuizzesPage() {
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState<Quiz | null>(null);
   const [toast, setToast] = useState<{ message: string; type: string } | null>(null);
-  const [form, setForm] = useState({ title: '', subject: '', questions: '[]' });
+  const [form, setForm] = useState({ title: '', subject: '', paper_id: '', questions: '[]' });
 
   useEffect(() => { fetchQuizzes(); }, []);
 
@@ -30,7 +30,7 @@ export default function QuizzesPage() {
     const template: QuizQuestion[] = [
       { question: 'Sample question?', options: ['Option A', 'Option B', 'Option C', 'Option D'], correct: 0 },
     ];
-    setForm({ title: '', subject: '', questions: JSON.stringify(template, null, 2) });
+    setForm({ title: '', subject: '', paper_id: '', questions: JSON.stringify(template, null, 2) });
     setShowModal(true);
   }
 
@@ -39,6 +39,7 @@ export default function QuizzesPage() {
     setForm({
       title: quiz.title,
       subject: quiz.subject,
+      paper_id: quiz.paper_id || '',
       questions: JSON.stringify(quiz.questions, null, 2),
     });
     setShowModal(true);
@@ -54,7 +55,7 @@ export default function QuizzesPage() {
       return;
     }
 
-    const payload = { title: form.title, subject: form.subject, questions: parsedQuestions };
+    const payload = { title: form.title, subject: form.subject, paper_id: form.paper_id || null, questions: parsedQuestions };
 
     if (editing) {
       const { error } = await supabase.from('quizzes').update(payload).eq('id', editing.id);
@@ -150,6 +151,10 @@ export default function QuizzesPage() {
                     {subjects.map((s) => <option key={s} value={s}>{s}</option>)}
                   </select>
                 </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Paper ID (Optional)</label>
+                <input className="form-input" value={form.paper_id} onChange={(e) => setForm({ ...form, paper_id: e.target.value })} placeholder="Link to a specific paper UUID" />
               </div>
               <div className="form-group">
                 <label className="form-label">Questions (JSON format)</label>

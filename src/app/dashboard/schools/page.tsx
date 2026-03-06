@@ -8,7 +8,9 @@ export default function SchoolsPage() {
   const [schools, setSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
   const [editing, setEditing] = useState<School | null>(null);
+  const [viewing, setViewing] = useState<School | null>(null);
   const [toast, setToast] = useState<{ message: string; type: string } | null>(null);
   const [form, setForm] = useState({
     name: '', code: '', district: '', type: 'Government - Mixed Secondary', exam_board: 'UNEB',
@@ -46,6 +48,11 @@ export default function SchoolsPage() {
     setShowModal(true);
   }
 
+  function openView(school: School) {
+    setViewing(school);
+    setShowViewModal(true);
+  }
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     if (editing) {
@@ -78,7 +85,7 @@ export default function SchoolsPage() {
           <h2>🏫 Schools</h2>
           <p>Manage Ugandan schools database</p>
         </div>
-        <div className="header-actions">
+        <div className="header-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
            <div className="search-container">
             <input 
               type="text" 
@@ -93,36 +100,42 @@ export default function SchoolsPage() {
       </header>
       <div className="content-body">
         <div className="glass-card">
+          <div style={{ marginBottom: '16px', display: 'flex', gap: 8, alignItems: 'center' }}>
+             <span className="badge badge-purple">{filteredSchools.length} Total</span>
+          </div>
           {filteredSchools.length > 0 ? (
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Code</th>
-                  <th>District</th>
-                  <th>Type</th>
-                  <th>Exam Board</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {schools.map((s) => (
-                  <tr key={s.id}>
-                    <td>{s.name}</td>
-                    <td><span className="badge badge-blue">{s.code}</span></td>
-                    <td>{s.district}</td>
-                    <td>{s.type}</td>
-                    <td><span className="badge badge-green">{s.exam_board}</span></td>
-                    <td>
-                      <div className="actions">
-                        <button className="btn btn-ghost btn-sm" onClick={() => openEdit(s)}>✏️</button>
-                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(s.id)}>🗑️</button>
-                      </div>
-                    </td>
+            <div className="table-responsive">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>District</th>
+                    <th>Type</th>
+                    <th>Exam Board</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filteredSchools.map((s) => (
+                    <tr key={s.id}>
+                      <td>{s.name}</td>
+                      <td><span className="badge badge-blue">{s.code}</span></td>
+                      <td>{s.district}</td>
+                      <td>{s.type}</td>
+                      <td><span className="badge badge-green">{s.exam_board}</span></td>
+                      <td>
+                        <div className="actions">
+                          <button className="btn btn-ghost btn-sm" onClick={() => openView(s)} title="View">👁️</button>
+                          <button className="btn btn-ghost btn-sm" onClick={() => openEdit(s)} title="Edit">✏️</button>
+                          <button className="btn btn-danger btn-sm" onClick={() => handleDelete(s.id)} title="Delete">🗑️</button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <div className="empty-state">
               <div className="icon">🏫</div>
@@ -133,6 +146,7 @@ export default function SchoolsPage() {
         </div>
       </div>
 
+      {/* Editor Modal */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -175,6 +189,55 @@ export default function SchoolsPage() {
                 <button type="submit" className="btn btn-primary">{editing ? 'Update' : 'Create'}</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* View Modal */}
+      {showViewModal && viewing && (
+        <div className="modal-overlay" onClick={() => setShowViewModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>School Details</h3>
+              <button className="modal-close" onClick={() => setShowViewModal(false)}>✕</button>
+            </div>
+            <div className="view-details" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
+                <div style={{ width: 64, height: 64, borderRadius: '16px', background: 'linear-gradient(135deg, #00b894, #55efc4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>
+                  🏫
+                </div>
+                <div>
+                  <h2 style={{ fontSize: '20px', margin: 0 }}>{viewing.name}</h2>
+                  <span className="badge badge-blue" style={{ marginTop: '4px', display: 'inline-block' }}>{viewing.code}</span>
+                </div>
+              </div>
+              
+              <div className="form-grid">
+                <div>
+                  <label className="form-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>District</label>
+                  <p>{viewing.district}</p>
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>Type</label>
+                  <p>{viewing.type}</p>
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>Exam Board</label>
+                  <p>{viewing.exam_board}</p>
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>Created Date</label>
+                  <p>{new Date(viewing.created_at).toLocaleDateString()}</p>
+                </div>
+                <div style={{ gridColumn: 'span 2' }}>
+                  <label className="form-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>System ID</label>
+                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', wordBreak: 'break-all' }}>{viewing.id}</p>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-primary" onClick={() => setShowViewModal(false)}>Close</button>
+            </div>
           </div>
         </div>
       )}

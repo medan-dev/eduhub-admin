@@ -30,7 +30,8 @@
   box-sizing: border-box;
 }
 
-.mobile-toggle, .mobile-header {
+.mobile-toggle,
+.mobile-header {
   display: none;
 }
 
@@ -50,7 +51,7 @@ body {
   inset: 0;
   z-index: -1;
   background-color: var(--bg-primary);
-  background-image: 
+  background-image:
     radial-gradient(at 0% 0%, rgba(124, 77, 255, 0.15) 0px, transparent 50%),
     radial-gradient(at 100% 0%, rgba(0, 229, 255, 0.1) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(124, 77, 255, 0.1) 0px, transparent 50%),
@@ -61,9 +62,15 @@ body {
 }
 
 @keyframes meshMove {
-  0% { transform: scale(1) translate(0, 0); }
-  50% { transform: scale(1.1) translate(20px, 10px); }
-  100% { transform: scale(1) translate(0, 0); }
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.1) translate(20px, 10px);
+  }
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
 }
 
 /* Scrollbar */
@@ -358,11 +365,7 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(
-    90deg,
-    #7c4dff 0%,
-    #3b82f6 100%
-  );
+  background: linear-gradient(90deg, #7c4dff 0%, #3b82f6 100%);
   color: white;
   box-shadow: 0 10px 20px -5px rgba(124, 77, 255, 0.4);
   border: none;
@@ -622,7 +625,7 @@ body {
   padding: 40px 32px;
   background: rgba(10, 10, 26, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
+  box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px);
@@ -631,13 +634,18 @@ body {
 }
 
 .login-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -1px;
   left: 30px;
   right: 30px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   z-index: 1;
 }
 .login-logo-container {
@@ -773,7 +781,7 @@ body {
     transform: translateX(-100%);
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
   }
-  
+
   .sidebar.open {
     transform: translateX(0);
   }
@@ -784,6 +792,12 @@ body {
 
   .content-header {
     padding: 16px 20px;
+  }
+
+  .mobile-header {
+    display: flex !important;
+    align-items: center;
+    gap: 16px;
   }
 
   .mobile-toggle {
@@ -834,13 +848,19 @@ body {
   }
 
   /* Responsive Table */
-  .glass-card {
+  .table-responsive {
     overflow-x: auto;
-    padding: 12px;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -16px;
+    padding: 0 16px;
   }
 
   .data-table {
-    min-width: 600px;
+    min-width: 700px;
+  }
+
+  .glass-card {
+    padding: 16px;
   }
 
   .modal-content {
